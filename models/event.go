@@ -12,10 +12,10 @@ type Event struct {
 	Description string    `json:"description" binding:"required"`
 	Location    string    `json:"location" binding:"required"`
 	DateTime    time.Time `json:"dateTime" binding:"required"`
-	UserID      int       `json:"userId"`
+	UserID      int64     `json:"userId"`
 }
 
-func (e Event) Save() error {
+func (e *Event) Save() error {
 	query := `
 	INSERT INTO events (name, description, location, dateTime, user_id) 
 	VALUES (?, ?, ?, ?, ?)
@@ -40,7 +40,7 @@ func (e Event) Save() error {
 	return err
 }
 
-func (e Event) Update() error {
+func (e *Event) Update() error {
 	query := `
 		UPDATE events 
 		SET name = ?, description = ?, location = ?, dateTime = ? 
@@ -103,7 +103,7 @@ func GetEventByID(id int64) (*Event, error) {
 	return &event, nil
 }
 
-func (event Event) Delete() error {
+func (event *Event) Delete() error {
 	query := `
 		DELETE FROM events WHERE id = ?
 	`
